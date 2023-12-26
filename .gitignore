@@ -1,0 +1,6 @@
+#NPM
+node_modules/
+
+# GRPC
+proto/protos/
+proto/service.ts
