@@ -1,11 +1,19 @@
+import { AgentType } from "../proto/protos/AgentType";
+import { WorldModel__Output } from "../proto/protos/WorldModel";
+import { SampleCoachAgent } from "./sample-coach-agent";
 import { SamplePlayerAgent } from "./sample-player-agent";
+import { SampleTrainerAgent } from "./sample-trainer-agent";
 
 export class GRpcService{
-    agent: SamplePlayerAgent;
+    playerAgent: SamplePlayerAgent;
+    coachAgent: SampleCoachAgent;
+    trainerAgent: SampleTrainerAgent;
 
     constructor(){
         console.log('GRpcService Init')
-        this.agent = new SamplePlayerAgent();
+        this.playerAgent = new SamplePlayerAgent();
+        this.coachAgent = new SampleCoachAgent();
+        this.trainerAgent = new SampleTrainerAgent();
     }
 
     sendInitMessage(call: any, callback: any) {
@@ -14,26 +22,40 @@ export class GRpcService{
     }
 
     sendServerParam(call: any, callback: any) {
-        console.log('sendServerParam');
-        this.agent.setServerParam(call.request.serverParam);
+        // console.log('sendServerParam');
+        this.playerAgent.setServerParam(call.request);
+        this.coachAgent.setServerParam(call.request);
+        this.trainerAgent.setServerParam(call.request);
         callback(null,  {Empty: {}});
     }
 
     sendPlayerParam(call: any, callback: any) {
-        console.log('sendPlayerParam');
-        this.agent.setPlayerParam(call.request.playerParam);
+        // console.log('sendPlayerParam');
+        this.playerAgent.setPlayerParam(call.request);
+        this.coachAgent.setPlayerParam(call.request);
+        this.trainerAgent.setPlayerParam(call.request);
         callback(null,  {Empty: {}});
     }
 
     sendPlayerType(call: any, callback: any) {
-        console.log('sendPlayerType');
-        this.agent.setPlayerType(call.request.playerType);
+        this.playerAgent.setPlayerType(call.request);
+        this.coachAgent.setPlayerType(call.request);
+        this.trainerAgent.setPlayerType(call.request);
         callback(null,  {Empty: {}});
     }
 
-    getActions(call: any, callback: any) {
-        let actions = this.agent.getActions(call.request.worldModel);
+    getPlayerActions(call: any, callback: any) {
+        let actions = this.playerAgent.getActions(call.request.worldModel);
         callback(null,  {actions: actions});
     }
 
+    getCoachActions(call: any, callback: any) {
+        let actions = this.coachAgent.getActions(call.request.worldModel);
+        callback(null,  {actions: actions});
+    }
+
+    getTrainerActions(call: any, callback: any) {
+        let actions = this.trainerAgent.getActions(call.request.worldModel);
+        callback(null,  {actions: actions});
+    }
 }

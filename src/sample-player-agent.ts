@@ -1,5 +1,5 @@
-import { Action } from "../proto/protos/Action";
 import { GameModeType } from "../proto/protos/GameModeType";
+import { PlayerAction } from "../proto/protos/PlayerAction";
 import { PlayerParam } from "../proto/protos/PlayerParam";
 import { PlayerType } from "../proto/protos/PlayerType";
 import { ServerParam } from "../proto/protos/ServerParam";
@@ -17,22 +17,21 @@ export class SamplePlayerAgent{
     }
 
     setServerParam(serverParam: ServerParam){
-        console.log('setServerParam');
+        // console.log('setServerParam');
         this.serverParam = serverParam;
     }
     setPlayerParam(playerParam: PlayerParam){
-        console.log('setPlayerParam');
+        // console.log('setPlayerParam');
         this.playerParam = playerParam;
     }
     setPlayerType(playerType: PlayerType){
-        console.log('setPlayerType');
         if (playerType.id == undefined) {
             return
         }
         this.playerType[playerType.id] = playerType;
     }
 
-    getActions(wm: WorldModel): Action[] {
+    getActions(wm: WorldModel): PlayerAction[] {
         if (wm.gameModeType === GameModeType.PlayOn){
             if (wm.self?.isKickable){
                 return [{

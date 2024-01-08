@@ -5,22 +5,31 @@ import { GRpcService } from './grpc-service';
 
 const PROTO_FILE = __dirname + '/../proto/service.proto';
 
-const packageDefinition = loadSync(PROTO_FILE);
+const packageDefinition = loadSync(PROTO_FILE,{
+  defaults: true,
+});
 const grpc = (loadPackageDefinition(packageDefinition) as unknown) as ProtoGrpcType;
 
 var server = new Server();
 var service = new GRpcService();
 server.addService(grpc.protos.Game.service, {
-  GetActions: (call: any, callback: any) => {
-    service.getActions(call, callback);
+  GetPlayerActions: (call: any, callback: any) => {
+    service.getPlayerActions(call, callback);
+  },
+  GetCoachActions: (call: any, callback: any) => {
+    service.getCoachActions(call, callback);
+  },
+  GetTrainerActions: (call: any, callback: any) => {
+    service.getTrainerActions(call, callback);
   },
   SendInitMessage: (call: any, callback: any) => {
+    console.log("SendInitMessage")
     service.sendInitMessage(call, callback);
   },
-  SendServerParam: (call: any, callback: any) => {
+  SendServerParams: (call: any, callback: any) => {
     service.sendServerParam(call, callback);
   },
-  SendPlayerParam: (call: any, callback: any) => {
+  SendPlayerParams: (call: any, callback: any) => {
     service.sendPlayerParam(call, callback);
   },
   SendPlayerType: (call: any, callback: any) => {
