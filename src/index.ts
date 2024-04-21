@@ -34,6 +34,9 @@ server.addService(grpc.protos.Game.service, {
   },
   SendPlayerType: (call: any, callback: any) => {
     service.sendPlayerType(call, callback);
+  },
+  GetInitMessage: (call: any, callback: any) => {
+    service.getInitMessage(call, callback);
   }
 });
 server.bindAsync('localhost:50051', ServerCredentials.createInsecure(), () => {

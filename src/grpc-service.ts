@@ -58,4 +58,9 @@ export class GRpcService{
         let actions = this.trainerAgent.getActions(call.request.worldModel);
         callback(null,  {actions: actions});
     }
+
+    getInitMessage(call: any, callback: any) {
+        console.log('getInitMessage');
+        callback(null,  {Empty: {}});
+    }
 }
