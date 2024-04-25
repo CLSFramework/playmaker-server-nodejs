@@ -10,6 +10,8 @@ const packageDefinition = loadSync(PROTO_FILE,{
 });
 const grpc = (loadPackageDefinition(packageDefinition) as unknown) as ProtoGrpcType;
 
+var connection_number = 0;
+
 var server = new Server();
 var service = new GRpcService();
 server.addService(grpc.protos.Game.service, {
@@ -36,7 +38,20 @@ server.addService(grpc.protos.Game.service, {
     service.sendPlayerType(call, callback);
   },
   GetInitMessage: (call: any, callback: any) => {
+    connection_number++;
+    console.log("Connection number: " + connection_number);
     service.getInitMessage(call, callback);
+  },
+  SendByeCommand: (call: any, callback: any) => {
+    connection_number--;
+    console.log("Connection number: " + connection_number);
+    callback(null,  {Empty: {}});
+    if(connection_number == 0){
+      console.log("All connections closed");
+      server.tryShutdown(() => {
+        console.log("Server shutdown");
+      });
+    }
   }
 });
 server.bindAsync('localhost:50051', ServerCredentials.createInsecure(), () => {
