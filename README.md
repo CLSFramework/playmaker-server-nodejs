@@ -1,62 +1,87 @@
 # About
-This server is used to receive the state of the RCSSServer from the agent and respond to it with an action. [SoccerSimulationProxy](https://github.com/CLSFramework/soccer-simulation-proxy) is a base that sends the state (World Model) to this server and waits for the action to send it to the RCSSServer. This base is implemented on the helios-base and has all of the features of the helios-base, such as ChainAction (Planner), and the state model of the environment is as same as the WorldModel in the helios-base. The [protobuf](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Protobuf) that we defined has covered all of the information about the environment.
+RoboCup is an international competition aimed at advancing autonomous robotics and AI through tasks like soccer and rescue. The RoboCup Soccer Simulation 2D league focuses on developing intelligent agents that play soccer in a simulated 2D environment. This league is ideal for testing and developing AI and ML algorithms, including reinforcement learning and multi-agent systems. [more details](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Definitions)
 
-# How to use
-To use this server and the Soccer Simulation 2D environment, you need to install RCSSServer and SoccerWindow2, and also you need the PROXY Base. In addition, the Proxy base is dependent on the Librcsc which you need it installed on the system. The installation of these tools is explained in the following sections.
+![image](https://github.com/Cross-Language-Soccer-Framework/cross-language-soccer-framework/assets/25696836/7b0b1d49-7001-479c-889f-46a96a8802c4)
 
-### Requirements
-- [RCSSServer](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Server)
-- [Librcsc](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Proxy)
-- [SoccerWindow2](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/SoccerWindow2)
-- [PROXY Base](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Proxy)
+![image](https://github.com/Cross-Language-Soccer-Framework/cross-language-soccer-framework/assets/25696836/d152797b-53f0-490f-a8dd-b8c0ef667317)
 
-### RCSSServer
-RCSSServer is the server that is used to simulate the Soccer Simulation 2D environment. This application receives the actions from the agents and apply them on the environemnt and sends the state of the environment them at every cycle. The installation is explaint in [HERE](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Server).
+To run a game in the RoboCup Soccer Simulation 2D, you need to operate the rcssserver for hosting games, rcssmonitor to display them, and engage 12 agents (11 players and a coach) per team. Each cycle, agents receive data from the server and must execute actions such as dash and kick. Developing a team can be complex due to the environment's intricacy, typically necessitating C++ programming. However, our framework allows for NodeJS development, leveraging the helios-base features. It introduces the playmaker-server, a NodeJS-implemented server that interacts with the rcssserver via a proxy, managing environment states and agent actions based on the WorldModel from helios-base. Our defined protobuf schema ensures all environmental data is comprehensively covered, facilitating smooth communication between the playmaker server and the rcssserver.
 
-### Librcsc
-This library which is developed by the [helios-base](https://github.com/helios-base/helios-base) developers, has many tools that help researchers focus on their research only. This features are: handling the connection between the agent and the RCSSServer, handling the [high-level commands](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Protobuf#high-level-actions), etc. The installation is explained in [HERE](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Proxy).
+To find more information about the framework, you can visit the [CLSFramework Wiki Pages](https://github.com/CLSFramework/cross-language-soccer-framework/wiki)
 
-### SoccerWindow2
-This application is used to visualize the environment of the soccer game. SoccerWindow2 is connected to the RCSSServer and receives the information of the field at each cycle and visualize the field.
+# RUN
+To run a game by using the playmaker-server, you need to run rcssserver, rcssmonitor, soccer-simulation-proxy team, and the playmaker-server. To run each of them there some different solutions, you can find more information about them in the following list:
 
-In addition, this application has many tools to debug the decision-making algorithems of the agents. These debug tools can be visualize or only text-based.
+- [RCSSServer](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/RoboCup-Soccer-Simulation-Server)
+- [Rcssmonitor](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Monitor)
+- [Soccer-Simulation-Proxy](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Proxy)
 
-The installation is explained in [HERE](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/SoccerWindow2).
+In this page, we will show the simplest way to start a game.
 
-
-### PROXY Base
-This base which is implemented on the helios-base, is used to send the state of the environment to the ```grpc-server``` and receive the action from it at each cycle. This base has all of the helios-base features and it sends all of the important information of the field to the ```grpc-server```.
-
-The explaination of the building it is [HERE](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Proxy).
-
-### RUN
-To run the a game that agents connect to the ```grpc-server```, you have to first run the RCSSServer and then run the SoccerWindow2. After that, you have to run the ```grpc-server``` and then run the agents. The agents will connect to the ```grpc-server``` and the ```grpc-server``` will connect to the RCSSServer.
-
-- run the RCSSServer using the following command:
+### Clone the repository
 ```bash
-rcssserver
+git clone https://github.com/CLSFramework/playmaker-server-nodejs.git
+cd playmaker-server-nodejs
 ```
 
-- run the SoccerWindow2 using the following command:
+### Install ubuntu and python dependencies
 ```bash
-soccerwindow2
+sudo apt-get install fuse
+python3 -m pip install -r requirements.txt
 ```
 
-- run the ```grpc-server``` using the following command:
+### Download rcssserver and soccer-simulation-proxy AppImages
 ```bash
-cd path/to/playmaker-server-nodejs
+chmod 777 download-server-proxy.sh
+./download-server-proxy.sh
+```
+
+These commands will download the rcssserver and soccer-simulation-proxy AppImages. The rcssserver app-image is available in rcssserver directory and the soccer-simulation-proxy app-image is available in soccer-simulation-proxy directory. You can download the AppImages manually from the following links:
+- [rcssserver](https://github.com/CLSFramework/rcssserver/releases)
+- [soccer-simulation-proxy](https://github.com/CLSFramework/soccer-simulation-proxy/releases)
+
+You can also build them from source code. You can find more information about building the rcssserver and the soccer-simulation-proxy in the following links:
+- [rcssserver](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/RoboCup-Soccer-Simulation-Server)
+- [soccer-simulation-proxy](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Proxy)
+
+### Run the rcssserver
+The server should be run before the soccer-simulation-proxy agents.
+
+```bash
+cd rcssserver
+chmod 777 rcssserver-x86_64.AppImage
+./rcssserver-x86_64.AppImage
+```
+
+### Run Playmaker-Server (NodeJS)
+It would be better to run the Playmaker-Server in a separate terminal and before running the soccer-simulation-proxy agents.
+```bash
+npm install # for the first time
 npm start
 ```
 
-- run the agents using the following command:
+### Run the soccer-simulation-proxy
 ```bash
-cd path/to/soccer-simulation-proxy
+cd soccer-simulation-proxy
 ./start.sh
 ```
+
+#### Some Notes:
 Note that if you want to use the debug tools of the ```soccerwindow2```, you have to run the ```./start-debug.sh``` instead of the ```./start.sh```.
 
-Also, instead of running the ```grpc-server``` and the agents separately, you can run the ```grpc-server``` and the agents in the same time using the following command:
+### Run all components in one command
 ```bash
-cd path/to/playmaker-server-nodejs
 ./start-team.sh
 ```
+
+
+Note: In the competition, the competition manager will use the ```start-team.sh``` to run the server and the agents. Also each player has to connecte to a different ```playermaker-server```.
+
+# How It Works?
+The [soccer-simulation-proxy](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Soccer-Simulation-Proxy) is a base that acts as an intermediate connection between the RCSSServer and the ```playmaker-server```. The soccer-simulation-proxy receives the observation and the information of the field from the RCSSServer and send them to the ```playmaker-server```. The ```playmaker-server``` receives the observation and the information of the field as a ```WorldModel``` class in the [```protobuf```](https://github.com/CLSFramework/cross-language-soccer-framework/wiki/Protobuf) from the Proxy base and sends the action to the Proxy base. The Proxy base receives the action from the ```playmaker-server``` and sends it to the RCSSServer, and this happens in each cycle of the game.
+
+# Related Projects:
+Also you can find some useful examples in the following repositories:
+
+- [soccer-gym](https://github.com/CLSFramework/soccer-gym)
+- [playmaker-python](https://github.com/CLSFramework/playmaker-server-python)

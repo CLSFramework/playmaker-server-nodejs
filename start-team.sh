@@ -2,6 +2,6 @@
 
 npm start &
 
-cd SoccerSimulationProxyBin/bin
+cd soccer-simulation-proxy/
 
 ./start.sh
