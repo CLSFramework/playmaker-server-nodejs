@@ -3,6 +3,9 @@ import { WorldModel__Output } from "../proto/protos/WorldModel";
 import { SampleCoachAgent } from "./sample-coach-agent";
 import { SamplePlayerAgent } from "./sample-player-agent";
 import { SampleTrainerAgent } from "./sample-trainer-agent";
+import type { RegisterResponse } from "../proto/protos/RegisterResponse";
+import { isCallOrNewExpression } from "typescript";
+import { BestPlannerActionRequest } from "../proto/protos/BestPlannerActionRequest";
 
 export class GRpcService{
     playerAgent: SamplePlayerAgent;
@@ -59,8 +62,18 @@ export class GRpcService{
         callback(null,  {actions: actions});
     }
 
-    getInitMessage(call: any, callback: any) {
-        console.log('getInitMessage');
-        callback(null,  {Empty: {}});
+    register(call: any, callback: any , connection_number: number) {
+        console.log('Register');
+        let response: RegisterResponse = {};
+        response.uniformNumber = call.request.uniformNumber;
+        response.agentType = call.request.agentType;
+        response.teamName = call.request.teamName;
+        response.clientId = connection_number;
+        callback(null,  response);
+    }
+
+    getBestPlannerAction(call: any, callback: any) {
+        let action_number = this.playerAgent.getBestPlannerAction(call.request);
+        callback(null,  action_number);
     }
 }
