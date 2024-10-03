@@ -37,10 +37,10 @@ server.addService(grpc.protos.Game.service, {
   SendPlayerType: (call: any, callback: any) => {
     service.sendPlayerType(call, callback);
   },
-  GetInitMessage: (call: any, callback: any) => {
+  Register: (call: any, callback: any) => {
     connection_number++;
     console.log("Connection number: " + connection_number);
-    service.getInitMessage(call, callback);
+    service.register(call, callback,connection_number);
   },
   SendByeCommand: (call: any, callback: any) => {
     connection_number--;
@@ -52,6 +52,9 @@ server.addService(grpc.protos.Game.service, {
         console.log("Server shutdown");
       });
     }
+  },
+  GetBestPlannerAction: (call: any, callback: any) => {
+    service.getBestPlannerAction(call, callback);
   }
 });
 server.bindAsync('localhost:50051', ServerCredentials.createInsecure(), () => {
