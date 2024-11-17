@@ -4,3 +4,7 @@ node_modules/
 # GRPC
 proto/protos/
 proto/service.ts
+
+# Scripts
+scripts/proxy/
+scripts/rcssserver/
